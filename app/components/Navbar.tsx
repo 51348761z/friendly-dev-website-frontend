@@ -24,11 +24,14 @@ export const Navbar = () => {
           className={"flex items-center gap-4 text-xl font-bold text-blue-400"}
         >
           <FaLaptopCode />
-          <h1 className="capitalize">friendly dev website</h1>
+          <span className="capitalize">friendly dev website</span>
         </NavLink>
 
         {/* Desktop Nav */}
-        <nav className="hidden space-x-6 text-base text-gray-300 capitalize md:flex">
+        <nav
+          aria-label="Main navigation"
+          className="hidden space-x-6 text-base text-gray-300 capitalize md:flex"
+        >
           {Object.entries(navLinks).map(([label, to]) => (
             <NavLink
               key={label}
@@ -45,6 +48,7 @@ export const Navbar = () => {
         {/* Mobile Nav Button */}
         <div className="flex items-center gap-4 md:hidden">
           <button
+            aria-label="Open menu"
             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
             className="cursor-pointer text-xl text-blue-400"
           >
@@ -55,7 +59,10 @@ export const Navbar = () => {
 
       {/* Mobile Nav Menu */}
       {isMobileMenuOpen && (
-        <nav className="flex justify-center space-x-6 border-t border-gray-700 bg-gray-800 px-6 py-4 capitalize md:hidden">
+        <nav
+          aria-label="Mobile navigation"
+          className="flex justify-center space-x-6 border-t border-gray-700 bg-gray-800 px-6 py-4 capitalize md:hidden"
+        >
           {Object.entries(navLinks).map(([label, to]) => (
             <NavLink
               key={label}

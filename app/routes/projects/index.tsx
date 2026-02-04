@@ -1,14 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router";
+import { Pagination } from "~/components/Pagination";
 import { ProjectCard } from "~/components/ProjectCard";
 import type { Route } from "./+types/index";
 
-type loaderReturnType = {
-  projects: Project[];
-};
-
-export async function loader({
-  request,
-}: Route.LoaderArgs): Promise<loaderReturnType> {
+export async function loader({ request }: Route.LoaderArgs) {
   const res = await fetch("http://localhost:20001/projects");
   const data: Project[] = await res.json();
 
@@ -16,14 +12,28 @@ export async function loader({
 }
 
 const ProjectsPage = ({ loaderData }: Route.ComponentProps) => {
-  const { projects }: loaderReturnType = loaderData;
+  const { projects } = loaderData;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const projectsPerPage = 2;
+
+  // Calculate total pages
+  const totalPages = Math.ceil(projects.length / projectsPerPage);
+
+  // Get current pages projects
+  const indexOfLastProject = currentPage * projectsPerPage;
+  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+  const currentProjects = projects.slice(
+    indexOfFirstProject,
+    indexOfLastProject,
+  );
 
   return (
     <>
-      <h2 className="mb-8 text-3xl font-bold text-white">🚀 Projects</h2>
+      <h1 className="mb-8 text-3xl font-bold text-white">🚀 Projects</h1>
 
       <div className="grid gap-6 sm:grid-cols-2">
-        {projects.map((project) => (
+        {currentProjects.map((project) => (
           <Link
             key={project.id}
             to={`/projects/${project.id}`}
@@ -33,6 +43,12 @@ const ProjectsPage = ({ loaderData }: Route.ComponentProps) => {
           </Link>
         ))}
       </div>
+
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+      />
     </>
   );
 };
