@@ -2,13 +2,13 @@ import { Link } from "react-router";
 import { ProjectCard } from "~/components/ProjectCard";
 import type { Route } from "./+types/index";
 
-type loderReturnType = {
+type loaderReturnType = {
   projects: Project[];
 };
 
 export async function loader({
   request,
-}: Route.LoaderArgs): Promise<loderReturnType> {
+}: Route.LoaderArgs): Promise<loaderReturnType> {
   const res = await fetch("http://localhost:20001/projects");
   const data: Project[] = await res.json();
 
@@ -16,7 +16,7 @@ export async function loader({
 }
 
 const ProjectsPage = ({ loaderData }: Route.ComponentProps) => {
-  const { projects } = loaderData;
+  const { projects }: loaderReturnType = loaderData;
 
   return (
     <>
@@ -26,7 +26,7 @@ const ProjectsPage = ({ loaderData }: Route.ComponentProps) => {
         {projects.map((project) => (
           <Link
             key={project.id}
-            to={`/project/${project.id}`}
+            to={`/projects/${project.id}`}
             className="block transform transition duration-300 hover:scale-[1.02]"
           >
             <ProjectCard project={project} />
