@@ -1,3 +1,4 @@
+import { AboutPreview } from "~/components/AboutPreview";
 import { FeaturedProjects } from "~/components/FeaturedProjects";
 import { API_ENDPOINTS } from "~/config/api";
 import type { Route } from "./+types/index";
@@ -25,6 +26,7 @@ export default function HomePage({
   return (
     <>
       <FeaturedProjects projects={projects} count={2} />
+      <AboutPreview />
     </>
   );
 }
