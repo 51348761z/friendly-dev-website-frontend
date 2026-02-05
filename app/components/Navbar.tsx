@@ -61,7 +61,7 @@ export const Navbar = () => {
       {isMobileMenuOpen && (
         <nav
           aria-label="Mobile navigation"
-          className="flex justify-center space-x-6 border-t border-gray-700 bg-gray-800 px-6 py-4 capitalize md:hidden"
+          className="flex justify-center space-x-6 border-t border-gray-700 bg-gray-800 px-6 py-4 text-gray-300 capitalize md:hidden"
         >
           {Object.entries(navLinks).map(([label, to]) => (
             <NavLink

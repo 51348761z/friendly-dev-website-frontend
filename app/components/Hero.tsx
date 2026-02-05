@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 export const Hero = ({ name = "[NAME]", text = "" }) => {
   return (
-    <section className="bg-gray-900 px-4 py-20 text-center text-white transition-colors duration-300">
+    <section className="bg-gray-700 px-4 py-20 text-center text-white transition-colors duration-300">
       <h2 className="mb-4 text-4xl font-bold">Hey, I'm {name}! 👋</h2>
       <p className="mx-auto mb-6 max-w-2xl text-lg text-gray-400">
         {text ||
