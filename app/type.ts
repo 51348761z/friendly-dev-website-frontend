@@ -8,3 +8,11 @@ interface Project {
   category: string;
   featured: boolean;
 }
+
+interface PostMeta {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string;
+}
