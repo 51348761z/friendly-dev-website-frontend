@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { CategoryFilter } from "~/components/CategoryFilter";
 import { Pagination } from "~/components/Pagination";
 import { ProjectCard } from "~/components/ProjectCard";
+import { API_ENDPOINTS } from "~/config/api";
 import type { Route } from "./+types/index";
 
 export function meta({}: Route.MetaArgs) {
@@ -18,7 +19,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const res = await fetch("http://localhost:20001/projects");
+  const res = await fetch(API_ENDPOINTS.projects);
   const data: Project[] = await res.json();
 
   return { projects: data };

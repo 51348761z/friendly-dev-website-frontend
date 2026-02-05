@@ -1,9 +1,10 @@
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router";
+import { API_ENDPOINTS } from "~/config/api";
 import type { Route } from "./+types/details";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
-  const res = await fetch(`http://localhost:20001/projects/${params.id}`);
+  const res = await fetch(API_ENDPOINTS.project(params.id));
   if (!res.ok) {
     throw new Response("Failed to fetch project", { status: res.status });
   }
