@@ -1,87 +1,56 @@
-# Welcome to React Router!
+# Friendly Dev - Portfolio Website
 
-A modern, production-ready template for building full-stack React applications using React Router.
+![Project Preview](./preview.png)
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+A portfolio website aimed at web developers, featuring project showcases and a blog. This project is built for learning purposes, exploring modern web development technologies.
 
-## Features
+**[Live Demo](https://friendly-dev-website-frontend.vercel.app/)**
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+> **⚠️ Performance Notice:** The backend is hosted on the free tier of Render.com. If the service has been inactive, please allow **50 seconds or more** for the initial request to complete due to the instance cold start.
 
-## Getting Started
+## 🛠 Tech Stack
+
+* **Frontend:** [React Router v7](https://reactrouter.com/) (Framework Mode, SSR), React 19, Tailwind CSS
+* **CMS:** [Strapi](https://strapi.io/) (Headless CMS)
+* **Database:** PostgreSQL (via [Neon](https://neon.tech/))
+* **Media:** [Cloudinary](https://cloudinary.com/) (Image management)
+* **Deployment:** Vercel (Frontend), Render (Backend)
+
+## ✨ Key Features
+
+* **Projects & Blog:** Showcases projects and blog posts with filtering, sorting, and reusable pagination.
+* **Responsive Design:** Fully responsive layout including a mobile-friendly hamburger menu.
+* **Contact Form:** Integrated with Formcarry.
+* **Architecture:**
+  * **React Router Framework Mode:** A key learning highlight. The project implements React Router v7 in framework mode to leverage advanced features like data loading and actions, shifting away from the traditional declarative routing approach.
+  * Transitioned from local JSON/Markdown (using `json-server`) to a full Headless CMS (Strapi) architecture.
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+* Node.js
+* pnpm (recommended)
 
 ### Installation
 
-Install the dependencies:
-
 ```bash
-npm install
+pnpm install
 ```
 
-### Development
+### Configuration
 
-Start the development server with HMR:
+Create a `.env` file in the root directory with the following variables:
 
-```bash
-npm run dev
+```env
+VITE_API_URL=http://localhost:20001
+VITE_STRAPI_URL=http://localhost:1337
+VITE_FORM_SUBMISSION_URL=your_formcarry_endpoint
 ```
 
-Your application will be available at `http://localhost:5173`.
+### Scripts
 
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+* `pnpm dev` - Start the development server.
+* `pnpm build` - Build for production.
+* `pnpm start` - Start the production server.
+* `pnpm json-server` - (Deprecated) Run the local JSON server. Used for early development before Strapi integration.
