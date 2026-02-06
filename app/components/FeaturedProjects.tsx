@@ -12,6 +12,10 @@ export const FeaturedProjects = ({
 }: FeaturedProjectsProps) => {
   const featureds = projects.filter((p) => p.featured).slice(0, count);
 
+  if (featureds.length === 0) {
+    return null;
+  }
+
   return (
     <section>
       <h2 className="mb-6 to-gray-200 text-2xl font-bold text-white">
