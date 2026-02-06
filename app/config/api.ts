@@ -10,3 +10,5 @@ export const API_ENDPOINTS = {
 export const STRAPI_ENDPOINTS = {
   baseUrl: GLOBAL_ENV.STRAPI_BASE_URL,
 };
+
+export const FORM_SUBMISSION_URL = GLOBAL_ENV.FORM_SUBMISSION_URL;

@@ -1,39 +1,6 @@
-import { Form } from "react-router";
-import type { Route } from "./+types/index";
+import { FORM_SUBMISSION_URL } from "~/config/api";
 
-export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const name = formData.get("name");
-  const email = formData.get("email");
-  const subject = formData.get("subject");
-  const message = formData.get("message");
-
-  const errors: Record<string, string> = {};
-  if (!name) errors.name = "Name is required";
-  if (!email) {
-    errors.email = "Email is required";
-  } else if (!/\S+@\S+\.\S+/.test(email.toString())) {
-    errors.email = "Email is invalid";
-  }
-  if (!subject) errors.subject = "Subject is required";
-  if (!message) errors.message = "Message is required";
-
-  if (Object.keys(errors).length > 0) {
-    return { errors };
-  }
-
-  const data = {
-    name,
-    email,
-    subject,
-    message,
-  };
-
-  return { message: "Message sent successfully!", data };
-}
-
-const ContactPage = ({ actionData }: Route.ComponentProps) => {
-  const error = actionData?.errors;
+const ContactPage = () => {
   const FIELD_LABELS: Record<string, string> = {
     name: "Full Name",
     email: "Email",
@@ -46,13 +13,8 @@ const ContactPage = ({ actionData }: Route.ComponentProps) => {
       <h2 className="mb-8 text-center text-3xl font-bold text-white">
         Contact Us
       </h2>
-      {actionData?.message ? (
-        <p className="mb-6 border border-green-500 bg-green-700 p-4 text-center text-green-100 shadow-md">
-          {actionData.message}
-        </p>
-      ) : null}
 
-      <Form method="post" className="space-y-6">
+      <form action={FORM_SUBMISSION_URL} method="POST" className="space-y-6">
         {Object.entries(FIELD_LABELS).map(([fieldName, label]) => (
           <div key={fieldName}>
             <label
@@ -76,9 +38,6 @@ const ContactPage = ({ actionData }: Route.ComponentProps) => {
                 className="mt-1 w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-gray-100"
               />
             )}
-            {error && error[fieldName] && (
-              <p className="mt-1 text-sm text-red-500">{error[fieldName]}</p>
-            )}
           </div>
         ))}
 
@@ -88,7 +47,7 @@ const ContactPage = ({ actionData }: Route.ComponentProps) => {
         >
           Send Message
         </button>
-      </Form>
+      </form>
     </div>
   );
 };

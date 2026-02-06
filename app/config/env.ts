@@ -11,4 +11,5 @@ const getEnv = (key: string): string => {
 export const GLOBAL_ENV = {
   API_BASE_URL: getEnv("VITE_API_URL"),
   STRAPI_BASE_URL: getEnv("VITE_STRAPI_URL"),
+  FORM_SUBMISSION_URL: getEnv("VITE_FORM_SUBMISSION_URL"),
 };
