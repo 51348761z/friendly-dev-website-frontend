@@ -1,7 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import { Link } from "react-router";
 import { API_ENDPOINTS } from "~/config/api";
-import { GLOBAL_ENV } from "~/config/env";
 import type { StrapiPostAttributes } from "~/type";
 import type { Route } from "./+types/details";
 
@@ -22,9 +21,7 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
     body: data.body,
     excerpt: data.excerpt,
     date: data.date,
-    image: data.image?.url
-      ? `${GLOBAL_ENV.STRAPI_BASE_URL}${data.image.url}`
-      : "/images/no-image.png",
+    image: data.image?.url ? data.image.url : "/images/no-image.png",
   };
 
   return post;

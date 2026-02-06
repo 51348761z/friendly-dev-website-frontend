@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import { CategoryFilter } from "~/components/CategoryFilter";
 import { Pagination } from "~/components/Pagination";
 import { ProjectCard } from "~/components/ProjectCard";
-import { API_ENDPOINTS, STRAPI_ENDPOINTS } from "~/config/api";
+import { API_ENDPOINTS } from "~/config/api";
 import type { Project, StrapiProjectAttributes, StrapiResponse } from "~/type";
 import type { Route } from "./+types/index";
 
@@ -28,9 +28,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     documentId: item.documentId,
     title: item.title,
     description: item.description,
-    image: item.image?.url
-      ? `${STRAPI_ENDPOINTS.baseUrl}${item.image.url}`
-      : "/images/no-image.png",
+    image: item.image?.url ? item.image.url : "/images/no-image.png",
     url: item.url,
     date: item.date,
     category: item.category,

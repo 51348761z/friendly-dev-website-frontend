@@ -1,7 +1,7 @@
 import { AboutPreview } from "~/components/AboutPreview";
 import { FeaturedProjects } from "~/components/FeaturedProjects";
 import { LatestPosts } from "~/components/LatestPosts";
-import { API_ENDPOINTS, STRAPI_ENDPOINTS } from "~/config/api";
+import { API_ENDPOINTS } from "~/config/api";
 import type {
   Post,
   Project,
@@ -48,9 +48,7 @@ export async function loader({ request }: Route.LoaderArgs) {
         documentId: item.documentId,
         title: item.title,
         description: item.description,
-        image: item.image?.url
-          ? `${STRAPI_ENDPOINTS.baseUrl}${item.image.url}`
-          : "/images/no-image.png",
+        image: item.image?.url ? item.image.url : "/images/no-image.png",
         url: item.url,
         date: item.date,
         category: item.category,
@@ -65,9 +63,7 @@ export async function loader({ request }: Route.LoaderArgs) {
         body: item.body,
         excerpt: item.excerpt,
         date: item.date,
-        image: item.image?.url
-          ? `${STRAPI_ENDPOINTS.baseUrl}${item.image.url}`
-          : "/images/no-image.png",
+        image: item.image?.url ? item.image.url : "/images/no-image.png",
       })) satisfies Post[],
     };
   } catch (error) {

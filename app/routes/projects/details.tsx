@@ -1,6 +1,6 @@
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router";
-import { API_ENDPOINTS, STRAPI_ENDPOINTS } from "~/config/api";
+import { API_ENDPOINTS } from "~/config/api";
 import type { Project, StrapiProjectAttributes } from "~/type";
 import type { Route } from "./+types/details";
 
@@ -16,9 +16,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     documentId: data.documentId,
     title: data.title,
     description: data.description,
-    image: data.image
-      ? `${STRAPI_ENDPOINTS.baseUrl}${data.image.url}`
-      : "/images/no-image.png",
+    image: data.image ? data.image.url : "/images/no-image.png",
     url: data.url,
     date: data.date,
     category: data.category,
