@@ -1,3 +1,5 @@
+import type { Project } from "~/type";
+
 type ProjectCartProps = {
   project: Project;
 };

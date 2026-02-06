@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import type { Project } from "~/type";
 import { ProjectCard } from "./ProjectCard";
 
 type FeaturedProjectsProps = {
@@ -21,7 +22,7 @@ export const FeaturedProjects = ({
         {featureds.map((project) => (
           <li key={project.id}>
             <Link
-              to={`/projects/${project.id}`}
+              to={`/projects/${project.documentId}`}
               className="block transform transition duration-300 hover:scale-[1.02]"
             >
               <ProjectCard project={project} />
