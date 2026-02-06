@@ -2,30 +2,13 @@ import { useState } from "react";
 import { Pagination } from "~/components/Pagination";
 import { PostCard } from "~/components/PostCard";
 import { PostFilter } from "~/components/PostFilter";
-import { API_ENDPOINTS } from "~/config/api";
-import type { Post, StrapiPostAttributes, StrapiResponse } from "~/type";
+import { fetchPosts } from "~/services/posts";
+import type { Post } from "~/type";
 import type { Route } from "./+types/index";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const url = new URL(`${API_ENDPOINTS.posts}&sort=date:desc`);
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Response("Failed to fetch blog posts", { status: res.status });
-  }
-
-  const json: StrapiResponse<StrapiPostAttributes> = await res.json();
-  const posts = json.data.map((item) => ({
-    id: item.id,
-    documentId: item.documentId,
-    slug: item.slug,
-    title: item.title,
-    body: item.body,
-    excerpt: item.excerpt,
-    date: item.date,
-    image: item.image?.url ? item.image.url : "/images/no-image.png",
-  })) satisfies Post[];
-
-  return posts;
+export async function loader({}: Route.LoaderArgs) {
+  const posts = await fetchPosts({ sort: "date:desc" });
+  return posts satisfies Post[];
 }
 
 const BlogPage = ({ loaderData: posts }: Route.ComponentProps) => {

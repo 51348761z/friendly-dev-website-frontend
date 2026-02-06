@@ -1,30 +1,15 @@
 import ReactMarkdown from "react-markdown";
 import { Link } from "react-router";
-import { API_ENDPOINTS } from "~/config/api";
-import type { StrapiPostAttributes } from "~/type";
+import { fetchPost } from "~/services/posts";
 import type { Route } from "./+types/details";
 
-export const loader = async ({ request, params }: Route.LoaderArgs) => {
+export const loader = async ({ params }: Route.LoaderArgs) => {
   const { slug } = params;
-  const res = await fetch(`${API_ENDPOINTS.post(slug)}?populate=*`);
-
-  if (!res.ok) {
-    throw new Response("Failed to fetch blog posts", { status: res.status });
+  if (!slug) {
+    throw new Response("Slug is required", { status: 400 });
   }
 
-  const { data }: { data: StrapiPostAttributes } = await res.json();
-  const post = {
-    id: data.id,
-    documentId: data.documentId,
-    slug: data.slug,
-    title: data.title,
-    body: data.body,
-    excerpt: data.excerpt,
-    date: data.date,
-    image: data.image?.url ? data.image.url : "/images/no-image.png",
-  };
-
-  return post;
+  return fetchPost(slug);
 };
 
 const BlogPostDetailsPage = ({ loaderData: post }: Route.ComponentProps) => {

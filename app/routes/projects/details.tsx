@@ -1,27 +1,16 @@
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router";
-import { API_ENDPOINTS } from "~/config/api";
-import type { Project, StrapiProjectAttributes } from "~/type";
+import { fetchProject } from "~/services/projects";
+import type { Project } from "~/type";
 import type { Route } from "./+types/details";
 
 export async function loader({ params }: Route.LoaderArgs) {
-  const res = await fetch(`${API_ENDPOINTS.project(params.id)}?populate=*`);
-  if (!res.ok) {
-    throw new Response("Failed to fetch project", { status: res.status });
+  if (!params.id) {
+    throw new Response("Project ID is required", { status: 400 });
   }
 
-  const { data }: { data: StrapiProjectAttributes } = await res.json();
-  return {
-    id: data.id,
-    documentId: data.documentId,
-    title: data.title,
-    description: data.description,
-    image: data.image ? data.image.url : "/images/no-image.png",
-    url: data.url,
-    date: data.date,
-    category: data.category,
-    featured: data.featured,
-  } satisfies Project;
+  const project = await fetchProject(params.id);
+  return project satisfies Project;
 }
 
 const DetailsPage = ({ loaderData: project }: Route.ComponentProps) => {

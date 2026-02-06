@@ -4,8 +4,8 @@ import { Link } from "react-router";
 import { CategoryFilter } from "~/components/CategoryFilter";
 import { Pagination } from "~/components/Pagination";
 import { ProjectCard } from "~/components/ProjectCard";
-import { API_ENDPOINTS } from "~/config/api";
-import type { Project, StrapiProjectAttributes, StrapiResponse } from "~/type";
+import { fetchProjects } from "~/services/projects";
+import type { Project } from "~/type";
 import type { Route } from "./+types/index";
 
 export function meta({}: Route.MetaArgs) {
@@ -19,23 +19,9 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const res = await fetch(`${API_ENDPOINTS.projects}/?populate=*`);
-
-  const json: StrapiResponse<StrapiProjectAttributes> = await res.json();
-  const projects: Project[] = json.data.map((item) => ({
-    id: item.id,
-    documentId: item.documentId,
-    title: item.title,
-    description: item.description,
-    image: item.image?.url ? item.image.url : "/images/no-image.png",
-    url: item.url,
-    date: item.date,
-    category: item.category,
-    featured: item.featured,
-  }));
-
-  return { projects };
+export async function loader({}: Route.LoaderArgs) {
+  const projects = await fetchProjects();
+  return { projects } satisfies { projects: Project[] };
 }
 
 const ProjectsPage = ({ loaderData }: Route.ComponentProps) => {
