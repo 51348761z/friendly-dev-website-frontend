@@ -1,7 +1,8 @@
 import { Link } from "react-router";
+import type { Post } from "~/type";
 
 type LatestPostsProp = {
-  posts: PostMeta[];
+  posts: Post[];
   limit?: number;
 };
 
@@ -18,7 +19,7 @@ export const LatestPosts = ({ posts, limit = 3 }: LatestPostsProp) => {
         {latestPosts.map((post) => (
           <li key={post.slug} className="h-full">
             <Link
-              to={`/blog/${post.slug}`}
+              to={`/posts/${post.documentId}`}
               className="flex h-full flex-col rounded-lg border border-gray-700 bg-gray-800 p-4 transition hover:shadow-md"
             >
               <h3 className="mb-1 text-lg font-semibold text-blue-400">

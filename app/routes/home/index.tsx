@@ -3,8 +3,9 @@ import { FeaturedProjects } from "~/components/FeaturedProjects";
 import { LatestPosts } from "~/components/LatestPosts";
 import { API_ENDPOINTS, STRAPI_ENDPOINTS } from "~/config/api";
 import type {
-  PostMeta,
+  Post,
   Project,
+  StrapiPostAttributes,
   StrapiProjectAttributes,
   StrapiResponse,
 } from "~/type";
@@ -22,7 +23,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     const url = new URL(request.url);
     const [projectsRes, postRes] = await Promise.all([
       fetch(`${API_ENDPOINTS.projects}?populate=*`),
-      fetch(new URL("/posts-meta.json", url).href),
+      fetch(API_ENDPOINTS.posts + "&sort=date:desc"),
     ]);
 
     if (!projectsRes.ok) {
@@ -38,7 +39,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
     const [projectData, postData]: [
       StrapiResponse<StrapiProjectAttributes>,
-      PostMeta[],
+      StrapiResponse<StrapiPostAttributes>,
     ] = await Promise.all([projectsRes.json(), postRes.json()]);
 
     return {
@@ -56,7 +57,18 @@ export async function loader({ request }: Route.LoaderArgs) {
         featured: item.featured,
       })) satisfies Project[],
 
-      posts: postData,
+      posts: postData.data.map((item) => ({
+        id: item.id,
+        documentId: item.documentId,
+        slug: item.slug,
+        title: item.title,
+        body: item.body,
+        excerpt: item.excerpt,
+        date: item.date,
+        image: item.image?.url
+          ? `${STRAPI_ENDPOINTS.baseUrl}${item.image.url}`
+          : "/images/no-image.png",
+      })) satisfies Post[],
     };
   } catch (error) {
     if (error instanceof Response) {

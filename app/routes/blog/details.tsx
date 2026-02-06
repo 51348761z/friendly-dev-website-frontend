@@ -1,51 +1,51 @@
 import ReactMarkdown from "react-markdown";
 import { Link } from "react-router";
+import { API_ENDPOINTS } from "~/config/api";
+import { GLOBAL_ENV } from "~/config/env";
+import type { StrapiPostAttributes } from "~/type";
 import type { Route } from "./+types/details";
 
 export const loader = async ({ request, params }: Route.LoaderArgs) => {
   const { slug } = params;
-  const url = new URL("/posts-meta.json", request.url);
-  const res = await fetch(url.href);
+  const res = await fetch(`${API_ENDPOINTS.post(slug)}?populate=*`);
 
   if (!res.ok) {
     throw new Response("Failed to fetch blog posts", { status: res.status });
   }
 
-  const data: PostMeta[] = await res.json();
-
-  const postMeta = data.find((p) => p.slug === slug);
-  if (!postMeta) {
-    throw new Response("Post not found", { status: 404 });
-  }
-
-  // Dynamically import raw markdown
-  const markdown: { default: string } = await import(
-    `../../posts/${slug}.md?raw`
-  );
-
-  return {
-    postMeta,
-    markdown: markdown.default,
+  const { data }: { data: StrapiPostAttributes } = await res.json();
+  const post = {
+    id: data.id,
+    documentId: data.documentId,
+    slug: data.slug,
+    title: data.title,
+    body: data.body,
+    excerpt: data.excerpt,
+    date: data.date,
+    image: data.image?.url
+      ? `${GLOBAL_ENV.STRAPI_BASE_URL}${data.image.url}`
+      : "/images/no-image.png",
   };
+
+  return post;
 };
 
-const BlogPostDetailsPage = ({ loaderData }: Route.ComponentProps) => {
-  const { postMeta, markdown } = loaderData;
-
+const BlogPostDetailsPage = ({ loaderData: post }: Route.ComponentProps) => {
   return (
     <div className="mx-auto max-w-3xl bg-gray-900 px-6 py-12">
-      <h1 className="mb-2 text-3xl font-bold text-blue-400">
-        {postMeta.title}
-      </h1>
-      <time
-        className="mb-6 block text-sm text-gray-400"
-        dateTime={postMeta.date}
-      >
-        {new Date(postMeta.date).toDateString()}
+      <h1 className="mb-2 text-3xl font-bold text-blue-400">{post.title}</h1>
+      <time className="mb-6 block text-sm text-gray-400" dateTime={post.date}>
+        {new Date(post.date).toDateString()}
       </time>
 
+      <img
+        src={post.image}
+        alt={post.title}
+        className="mb-6 h-64 w-full rounded-md object-cover"
+      />
+
       <div className="prose prose-invert mb-12 max-w-none">
-        <ReactMarkdown>{markdown}</ReactMarkdown>
+        <ReactMarkdown>{post.body}</ReactMarkdown>
       </div>
 
       <Link

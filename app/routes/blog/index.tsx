@@ -2,19 +2,33 @@ import { useState } from "react";
 import { Pagination } from "~/components/Pagination";
 import { PostCard } from "~/components/PostCard";
 import { PostFilter } from "~/components/PostFilter";
+import { API_ENDPOINTS } from "~/config/api";
+import { GLOBAL_ENV } from "~/config/env";
+import type { Post, StrapiPostAttributes, StrapiResponse } from "~/type";
 import type { Route } from "./+types/index";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const url = new URL("posts-meta.json", request.url);
+  const url = new URL(`${API_ENDPOINTS.posts}&sort=date:desc`);
   const res = await fetch(url);
   if (!res.ok) {
     throw new Response("Failed to fetch blog posts", { status: res.status });
   }
 
-  const data: PostMeta[] = await res.json();
-  data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const json: StrapiResponse<StrapiPostAttributes> = await res.json();
+  const posts = json.data.map((item) => ({
+    id: item.id,
+    documentId: item.documentId,
+    slug: item.slug,
+    title: item.title,
+    body: item.body,
+    excerpt: item.excerpt,
+    date: item.date,
+    image: item.image?.url
+      ? `${GLOBAL_ENV.STRAPI_BASE_URL}${item.image.url}`
+      : "/images/no-image.png",
+  })) satisfies Post[];
 
-  return data;
+  return posts;
 }
 
 const BlogPage = ({ loaderData: posts }: Route.ComponentProps) => {
